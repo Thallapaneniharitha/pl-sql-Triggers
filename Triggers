@@ -1,0 +1,45 @@
+select * from customers;
+
+ID	NAME	   AGE	ADDRESS	     SALARY
+1	jhansi	   54	rayachoti    70000
+2	rani	   64	rajampeta    57000
+3	haritha	   32	Rajampet     20000
+4	sandhay	   34	chennai	     50000
+5	ravi	   67	kapada	     37000
+6	prasanthi  34	kadapa	     40000
+
+1.program:
+
+CREATE OR REPLACE TRIGGER display_salary_changes 
+BEFORE DELETE OR INSERT OR UPDATE ON customers 
+FOR EACH ROW 
+WHEN (NEW.ID > 0) 
+DECLARE 
+   sal_diff number; 
+BEGIN 
+   sal_diff := :NEW.salary  - :OLD.salary; 
+   dbms_output.put_line('Old salary: ' || :OLD.salary); 
+   dbms_output.put_line('New salary: ' || :NEW.salary); 
+   dbms_output.put_line('Salary difference: ' || sal_diff); 
+END; 
+/ 
+output:
+Trigger created.
+INSERT INTO CUSTOMERS (ID,NAME,AGE,ADDRESS,SALARY) 
+VALUES (9, 'sarada', 27, 'kadapa', 6500.00 ); 
+
+output:-
+Old salary: 
+New salary: 6500
+Salary difference: 
+1 row(s) inserted.
+
+UPDATE customers 
+SET salary = salary + 500 
+WHERE id = 2; 
+
+output:
+Old salary: 40000
+New salary: 40500
+Salary difference: 500
+1 row(s) updated.
